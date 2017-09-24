@@ -1,0 +1,6 @@
+事务管理
+    --声明式事务管理(推荐使用)
+        --基于TransactionProxyFactoryBean
+        --基于Aspectj　Xml　配置方式
+
+    --编程时事务管理
