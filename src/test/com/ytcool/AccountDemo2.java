@@ -1,4 +1,4 @@
-package test;
+package com.ytcool;
 
 import com.ytcool.service.AccountService;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * 声明式事务管理的方式测试类
  */
-@ContextConfiguration(locations="classpath:applicationContext2.xml")
+@ContextConfiguration(locations= "classpath:applicationContext2.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AccountDemo2 {
 

@@ -1,4 +1,4 @@
-package test;
+package com.ytcool;
 
 import com.ytcool.service.AccountService;
 import org.junit.*;
@@ -7,7 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-@ContextConfiguration(locations="classpath:applicationContext.xml")
+@ContextConfiguration(locations= "classpath:applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AccountDemo {
 
