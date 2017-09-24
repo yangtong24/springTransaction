@@ -4,7 +4,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <!--引入外部的属性文件-->
-    <context:property-placeholder location="/jdbc.properties"/>
+    <context:property-placeholder location="classpath:jdbc.properties"/>
 
     <!--配置c3p0连接池-->
     <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -13,26 +13,44 @@
         <property name="jdbcUrl" value="${url}"/>
         <property name="driverClass" value="${driver}"/>
     </bean>
-
     <!--配置业务层的类-->
-    <bean id="service" class="com.ytcool.service.AccountServiceImpl">
-        <property name="accountDao" ref="accountDao"/>
-        <property name="transactionTemplate" ref="transactionTemplate"/>
+    <bean id="service2" class="com.ytcool.service.AccountServiceImpl">
+        <property name="accountDao" ref="accountDao2"/>
     </bean>
 
     <!--配置dao层的类-->
-    <bean id="accountDao" class="com.ytcool.dao.AccountDaoImpl">
+    <bean id="accountDao2" class="com.ytcool.dao.AccountDaoImpl">
         <property name="dataSource" ref="datasource"/>
     </bean>
 
     <!--配置事务管理器-->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <!--注入连接池的对象-->
+    <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="datasource"/>
     </bean>
 
-    <!--配置事务管理的模板,为了简化事务管理的代码而提供的类-->
-    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
-        <property name="transactionManager" ref="transactionManager"/>
+    <!--配置业务层的代理-->
+    <bean id="accountServiceProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <!--配置目标对象-->
+        <property name="target" ref="service2"/>
+        <!--注入事务管理-->
+        <property name="transactionManager" ref="transactionManager2"/>
+        <!--注入事务的一些属性-->
+        <property name="transactionAttributes">
+            <props>
+                <!--
+                prop的格式
+                PROPAGATION:事务的传播行为
+                ISOLATION :事务的隔离级别
+                readonly : 只读
+                -Exception :发生那些异常都回滚事务
+                +Exception :发生那些异常不回滚事务
+                -->
+
+                <prop key="transfer">
+                    PROPAGATION_REQUIRED
+                </prop>
+            </props>
+        </property>
+
     </bean>
 </beans>
