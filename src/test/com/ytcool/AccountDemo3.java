@@ -1,17 +1,22 @@
 package test;
 
 import com.ytcool.service.AccountService;
-import org.junit.*;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-@ContextConfiguration(locations="/applicationContext.xml")
-@RunWith(SpringJUnit4ClassRunner.class)
-public class AccountDemo {
 
-    @Resource(name = "service")
+/**
+ * 声明式事务管理方式二:基于AspectJ的xml方式配置测试类
+ */
+@ContextConfiguration(locations="classpath:applicationContext3.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+public class AccountDemo3 {
+
+
+    @Resource(name = "service4")
     private AccountService accountService;
 
 

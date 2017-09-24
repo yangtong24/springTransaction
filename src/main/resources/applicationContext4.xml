@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--引入外部的属性文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--配置c3p0连接池-->
+    <bean id="datasource4" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="jdbcUrl" value="${url}"/>
+        <property name="driverClass" value="${driver}"/>
+    </bean>
+    <!--配置业务层的类-->
+    <bean id="service4" class="com.ytcool.service.AccountServiceImpl">
+        <property name="accountDao" ref="accountDao4"/>
+    </bean>
+
+    <!--配置dao层的类-->
+    <bean id="accountDao4" class="com.ytcool.dao.AccountDaoImpl">
+        <property name="dataSource" ref="datasource4"/>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager4" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource4"/>
+    </bean>
+
+    <!--开启注解事务-->
+    <tx:annotation-driven transaction-manager="transactionManager4"/>
+
+
+</beans>

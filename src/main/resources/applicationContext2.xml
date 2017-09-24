@@ -7,7 +7,7 @@
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
     <!--配置c3p0连接池-->
-    <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <bean id="datasource2" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="user" value="${username}"/>
         <property name="password" value="${password}"/>
         <property name="jdbcUrl" value="${url}"/>
@@ -20,12 +20,12 @@
 
     <!--配置dao层的类-->
     <bean id="accountDao2" class="com.ytcool.dao.AccountDaoImpl">
-        <property name="dataSource" ref="datasource"/>
+        <property name="dataSource" ref="datasource2"/>
     </bean>
 
     <!--配置事务管理器-->
     <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="datasource"/>
+        <property name="dataSource" ref="datasource2"/>
     </bean>
 
     <!--配置业务层的代理-->
