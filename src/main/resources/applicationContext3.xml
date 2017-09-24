@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--引入外部的属性文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--配置c3p0连接池-->
+    <bean id="datasource3" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="jdbcUrl" value="${url}"/>
+        <property name="driverClass" value="${driver}"/>
+    </bean>
+    <!--配置业务层的类-->
+    <bean id="service3" class="com.ytcool.service.AccountServiceImpl">
+        <property name="accountDao" ref="accountDao3"/>
+    </bean>
+
+    <!--配置dao层的类-->
+    <bean id="accountDao3" class="com.ytcool.dao.AccountDaoImpl">
+        <property name="dataSource" ref="datasource3"/>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager3" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource3"/>
+    </bean>
+
+    <!--配置事务的通知(增强)-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager3">
+        <tx:attributes>
+            <tx:method name="transfer" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置切面-->
+    <aop:config>
+        <!--配置切入点-->
+        <aop:pointcut id="pointCut1" expression="execution(* com.ytcool.service.AccountService+.*(..))"/>
+        <!--配置切面-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut1"/>
+    </aop:config>
+
+</beans>
